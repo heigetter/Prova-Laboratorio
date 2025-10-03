@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><title>Produtos Cards - Formulário</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/produtos}">Gerenciamento de Produtos TCG</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" th:href="@{/produtos}">Lista</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/produtos/novo}">Novo</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-6 mx-auto">
+            <div class="card mt-4">
+                <div class="card-body bg-body-secondary">
+                    <h2 class="text-center mb-4" th:text="${produtos.idP} != null ? 'Editar Produto TCG' : 'Novo Produto TCG'"></h2>
+
+                    <!-- Formulário Novo Cliente -->
+                    <form th:if="${produtos.idP} == null"
+                          th:action="@{/produtos}" method="post" th:object="${produtos}"
+                          class="col-md-6 mx-auto mt-4">
+
+                        <div class="mb-3">
+                            <label for="franquiaP" class="form-label"><strong>Franquia*:</strong></label>
+                            <br>
+                            <select th:field="*{franquiaP}" id="franquiaP" required>
+                                <option th:each="franquiaPL : ${franquiaPList}" th:value="${franquiaPL}" th:text="${franquiaPL}"></option>
+                            </select>
+                            <div class="text-danger small"
+                                 th:if="${#fields.hasErrors('franquiaP')}" th:errors="*{franquiaP}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="nomeP" class="form-label"><strong>Nome*:</strong></label>
+                            <input th:field="*{nomeP}" id="nomeP" type="text" class="form-control" required placeholder="Insira o nome">
+                            <div class="text-danger small"
+                                 th:if="${#fields.hasErrors('nomeP')}" th:errors="*{nomeP}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="idiomaP" class="form-label"><strong>Idioma*:</strong></label>
+                            <br>
+                            <select th:name="idiomaP" th:field="*{idiomaP}" id="idiomaP" required>
+                                <option th:each="idiomaPL : ${idiomaPList}" th:value="${idiomaPL}" th:text="${idiomaPL}"></option>
+                            </select>
+
+                            <div class="text-danger small"
+                                 th:if="${#fields.hasErrors('idiomaP')}" th:errors="*{idiomaP}"></div>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <label for="tipoP" class="form-label"><strong>Tipo*</strong></label>
+                            <select th:name="tipoP" th:field="*{tipoP}" id="tipoP" required>
+                                <option th:each="tipoPL : ${tipoPList}" th:value="${tipoPL}" th:text="${tipoPL}"></option>
+                            </select>
+                            <div class="text-danger small"
+                                 th:if="${#fields.hasErrors('tipoP')}" th:errors="*{tipoP}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="precoP" class="form-label"><strong>Preço*:</strong></label>
+                            <input th:field="*{precoP}" id="precoP" type="number" step="0.01" class="form-control" required placeholder="Insira o preço dos Produtos.">
+                            <p class="text-danger small"
+                               th:if="${#fields.hasErrors('precoP')}" th:errors="*{precoP}"></p>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="quantidadeP" class="form-label"><strong>Quantidade*:</strong></label>
+                            <input th:field="*{quantidadeP}" id="quantidadeP" type="number" class="form-control" required placeholder="Insira a quantidade dos Produtos">
+                            <p class="text-danger small"
+                               th:if="${#fields.hasErrors('quantidadeP')}" th:errors="*{quantidadeP}"></p>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="fornecedorP" class="form-label"><strong>Fornecedor*:</strong></label>
+                            <input th:field="*{fornecedorP}" id="fornecedorP" type="text" class="form-control" required placeholder="Insira o vendendor dos Produtos.">
+                            <div class="text-danger small"
+                                 th:if="${#fields.hasErrors('fornecedorP')}" th:errors="*{fornecedorP}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="small">
+                                <p class="form-text">* Campos obrigatórios</p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 float-end">
+                            <a th:href="@{/produtos}" class="btn btn-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">Cadastrar</button>
+                        </div>
+                    </form>
+
+                    <!-- Formulário Editar Cliente -->
+                    <form th:if="${produtos.idP} != null"
+                          th:action="@{/produtos/{id}(id=${produtos.idP})}"
+                          method="post" th:object="${produtos}"
+                          class="col-md-6 mx-auto mt-4">
+
+                        <input type="hidden" name="_method" value="put"/>
+
+                        <div class="mb-3">
+                            <label for="franquiaP" class="form-label"><strong>Franquia*:</strong></label>
+                            <br>
+                            <select th:name="franquiaP" th:field="*{franquiaP}" id="franquiaP" required>
+                                <option th:each="franquiaPL : ${franquiaPList}" th:value="${franquiaPL}" th:text="${franquiaPL}"></option>
+                            </select>
+                            <div class="text-danger small"
+                                 th:if="${#fields.hasErrors('franquiaP')}" th:errors="*{franquiaP}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="nome" class="form-label"><strong>Nome*:</strong></label>
+                            <input th:field="*{nomeP}" id="nome" type="text" class="form-control" required placeholder="Insira o nome">
+                            <div class="text-danger small"
+                                 th:if="${#fields.hasErrors('nome')}" th:errors="*{nomeP}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="idiomaP" class="form-label"><strong>Idioma*:</strong></label>
+                            <br>
+                            <select th:name="idiomaP" th:field="*{idiomaP}" id="idiomaP" required>
+                                <option th:each="idiomaPL : ${idiomaPList}" th:value="${idiomaPL}" th:text="${idiomaPL}"></option>
+                            </select>
+
+                            <div class="text-danger small"
+                                 th:if="${#fields.hasErrors('idiomaP')}" th:errors="*{idiomaP}"></div>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <label for="tipo" class="form-label"><strong>Tipo*</strong></label>
+                            <select th:name="tipoP" th:field="*{tipoP}" id="tipo" required>
+                                <option th:each="tipoPL : ${tipoPList}" th:value="${tipoPL}" th:text="${tipoPL}"></option>
+                            </select>
+
+                            <div class="text-danger small"
+                                 th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipoP}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="precoP" class="form-label"><strong>Preço*:</strong></label>
+                            <input th:field="*{precoP}" id="precoP" type="number" step="0.01" class="form-control" placeholder="Insira o preço dos Produtos.">
+                            <p class="text-danger small"
+                               th:if="${#fields.hasErrors('precoP')}" th:errors="*{precoP}"></p>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="quantidade" class="form-label"><strong>Quantidade*:</strong></label>
+                            <input th:field="*{quantidadeP}" id="quantidade" type="number" class="form-control" placeholder="Insira a quantidade dos Produtos">
+                            <p class="text-danger small"
+                               th:if="${#fields.hasErrors('quantidade')}" th:errors="*{quantidadeP}"></p>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="fornecedor" class="form-label"><strong>Fornecedor*:</strong></label>
+                            <input th:field="*{fornecedorP}" id="fornecedor" type="text" class="form-control" required placeholder="Insira o vendendor dos Produtos.">
+                            <div class="text-danger small"
+                                 th:if="${#fields.hasErrors('fornecedor')}" th:errors="*{fornecedorP}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="small">
+                                <p class="form-text">* Campos obrigatórios</p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 float-end">
+                            <a th:href="@{/produtos}" class="btn btn-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">Atualizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

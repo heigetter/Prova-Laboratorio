@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><title>Cartas - Formulário</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/cartas}">Gerenciamento de Cartas</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" th:href="@{/cartas}">Lista</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/cartas/novo}">Novo</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-6 mx-auto">
+            <div class="card mt-4">
+                <div class="card-body bg-body-secondary">
+                    <h2 class="text-center mb-4" th:text="${cartas.id} != null ? 'Editar Cliente' : 'Novo Cliente'"></h2>
+
+                    <!-- Formulário Novo Cliente -->
+                    <form th:if="${cartas.id} == null"
+                          th:action="@{/cartas}" method="post" th:object="${cartas}"
+                          class="col-md-6 mx-auto mt-4">
+
+                        <div class="mb-3">
+                            <label for="franquia" class="form-label"><strong>Franquia*:</strong></label>
+                            <br>
+                            <select th:field="*{franquia}" id="franquia" required>
+                                <option th:each="franquiaL : ${franquiaList}" th:value="${franquiaL}" th:text="${franquiaL}"></option>
+                            </select>
+                            <div class="text-danger small"
+                                 th:if="${#fields.hasErrors('franquia')}" th:errors="*{franquia}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="nome" class="form-label"><strong>Nome*:</strong></label>
+                            <input th:field="*{nome}" id="nome" type="text" class="form-control" required placeholder="Insira o nome">
+                            <div class="text-danger small"
+                                 th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="idioma" class="form-label"><strong>Idioma*:</strong></label>
+                            <br>
+                            <select th:name="idioma" th:field="*{idioma}" id="idioma" required>
+                                <option th:each="idiomaL : ${idiomaList}" th:value="${idiomaL}" th:text="${idiomaL}"></option>
+                            </select>
+
+                            <div class="text-danger small"
+                                 th:if="${#fields.hasErrors('idioma')}" th:errors="*{idioma}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="edicao" class="form-label"><strong>Edição da Carta*:</strong></label>
+                            <input th:field="*{edicao}" id="edicao" type="text" class="form-control" required placeholder="Insira a Edição que vem a carta">
+                            <div class="text-danger small"
+                                 th:if="${#fields.hasErrors('edicao')}" th:errors="*{edicao}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="numeroC" class="form-label"><strong>Número da Carta*:</strong></label>
+                            <input th:field="*{numeroC}" id="numeroC" type="text" class="form-control" required placeholder="Insira o número de identificação">
+                            <div class="text-danger small"
+                                 th:if="${#fields.hasErrors('numeroC')}" th:errors="*{numeroC}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="preco" class="form-label"><strong>Preço*:</strong></label>
+                            <input th:field="*{preco}" id="preco" type="number" step="0.01" class="form-control" required placeholder="Insira o preço das cartas.">
+                            <p class="text-danger small"
+                                 th:if="${#fields.hasErrors('preco')}" th:errors="*{preco}"></p>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="quantidade" class="form-label"><strong>Quantidade*:</strong></label>
+                            <input th:field="*{quantidade}" id="quantidade" type="number" class="form-control" required placeholder="Insira a quantidade de cartas">
+                            <p class="text-danger small"
+                               th:if="${#fields.hasErrors('quantidade')}" th:errors="*{quantidade}"></p>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="fornecedor" class="form-label"><strong>Fornecedor*:</strong></label>
+                            <input th:field="*{fornecedor}" id="fornecedor" type="text" class="form-control" required placeholder="Insira o vendendor da carta.">
+                            <div class="text-danger small"
+                                 th:if="${#fields.hasErrors('fornecedor')}" th:errors="*{fornecedor}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="small">
+                                <p class="form-text">* Campos obrigatórios</p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 float-end">
+                            <a th:href="@{/cartas}" class="btn btn-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">Cadastrar</button>
+                        </div>
+                    </form>
+
+                    <!-- Formulário Editar Cliente -->
+                    <form th:if="${cartas.id} != null"
+                          th:action="@{/cartas/{id}(id=${cartas.id})}"
+                          method="post" th:object="${cartas}"
+                          class="col-md-6 mx-auto mt-4">
+
+                        <input type="hidden" name="_method" value="put"/>
+
+                        <div class="mb-3">
+                            <label for="franquia" class="form-label"><strong>Franquia*:</strong></label>
+                            <br>
+                            <select th:name="franquia" th:field="*{franquia}" id="franquia" required>
+                                <option th:each="franquiaL : ${franquiaList}" th:value="${franquiaL}" th:text="${franquiaL}"></option>
+                            </select>
+                            <div class="text-danger small"
+                                 th:if="${#fields.hasErrors('franquia')}" th:errors="*{franquia}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="nome" class="form-label"><strong>Nome*:</strong></label>
+                            <input th:field="*{nome}" id="nome" type="text" class="form-control" required placeholder="Insira o nome">
+                            <div class="text-danger small"
+                                 th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="idioma" class="form-label"><strong>Idioma*:</strong></label>
+                            <br>
+                            <select th:name="idioma" th:field="*{idioma}" id="idioma" required>
+                                <option th:each="idiomaL : ${idiomaList}" th:value="${idiomaL}" th:text="${idiomaL}"></option>
+                            </select>
+
+                            <div class="text-danger small"
+                                 th:if="${#fields.hasErrors('idioma')}" th:errors="*{idioma}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="edicao" class="form-label"><strong>Edição da Carta*:</strong></label>
+                            <input th:field="*{edicao}" id="edicao" type="text" class="form-control" required placeholder="Insira a Edição que vem a carta">
+                            <div class="text-danger small"
+                                 th:if="${#fields.hasErrors('edicao')}" th:errors="*{edicao}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="numeroC" class="form-label"><strong>Número da Carta*:</strong></label>
+                            <input th:field="*{numeroC}" id="numeroC" type="text" class="form-control" required placeholder="Insira o número de identificação">
+                            <div class="text-danger small"
+                                 th:if="${#fields.hasErrors('numeroC')}" th:errors="*{numeroC}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="preco" class="form-label"><strong>Preço*:</strong></label>
+                            <input th:field="*{preco}" id="preco" type="number" step="0.01" class="form-control" placeholder="Insira o preço das cartas.">
+                            <p class="text-danger small"
+                               th:if="${#fields.hasErrors('preco')}" th:errors="*{preco}"></p>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="quantidade" class="form-label"><strong>Quantidade*:</strong></label>
+                            <input th:field="*{quantidade}" id="quantidade" type="number" class="form-control" placeholder="Insira a quantidade de cartas">
+                            <p class="text-danger small"
+                               th:if="${#fields.hasErrors('quantidade')}" th:errors="*{quantidade}"></p>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="fornecedor" class="form-label"><strong>Fornecedor*:</strong></label>
+                            <input th:field="*{fornecedor}" id="fornecedor" type="text" class="form-control" required placeholder="Insira o vendendor da carta.">
+                            <div class="text-danger small"
+                                 th:if="${#fields.hasErrors('fornecedor')}" th:errors="*{fornecedor}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="small">
+                                <p class="form-text">* Campos obrigatórios</p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 float-end">
+                            <a th:href="@{/cartas}" class="btn btn-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">Atualizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

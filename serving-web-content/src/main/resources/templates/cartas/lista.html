@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Cartas - Lista</title></head>
+<body>
+<h1>Cartas</h1>
+
+<!-- Mensagem de sucesso -->
+<p th:if="${msg}" th:text="${msg}"></p>
+
+<p><a th:href="@{/cartas/novo}">Nova(s) Carta(s)</a></p>
+
+<table>
+    <tr>
+        <th>Franquia</th>
+        <th>Nome</th>
+        <th>Idioma</th>
+        <th>Edição</th>
+        <th>Número da Carta</th>
+        <th>Preço</th>
+        <th>Quantidade</th>
+        <th>Fornecedor</th>
+        <th>Ações</th>
+    </tr>
+    <tr th:each="c : ${cartas}">
+        <td th:text="${c.franquia}"></td>
+        <td th:text="${c.nome}"></td>
+        <td th:text="${c.idioma}"></td>
+        <td th:text="${c.edicao}"></td>
+        <td th:text="${c.numeroC}"></td>
+        <td th:text="${c.preco}"></td>
+        <td th:text="${c.quantidade}"></td>
+        <td th:text="${c.fornecedor}"></td>
+        <td>
+            <form th:action="@{/clientes/editar/{id}(id=${c.id})}" method="get">
+                <button type="submit">Editar</button>
+            </form>
+            <form th:action="@{/clientes/{id}(id=${c.id})}" method="post">
+                <input type="hidden" name="_method" value="delete"/>
+                <button type="submit">Excluir</button>
+            </form>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

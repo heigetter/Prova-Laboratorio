@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><title>Produtos - Lista</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/produtos}">Gerenciamento de Produto TCG</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" th:href="@{/produtos}">Lista</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/produtos/novo}">Novo</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-8 mx-auto">
+            <div class="card mt-4 mb-4">
+                <div class="card-body bg-body-secondary">
+                    <h2 class="text-center mb-4">Lista dos Produtos</h2>
+
+                    <!-- Mensagem de sucesso -->
+                    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <span th:text="${success}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <div class="alert alert-danger" th:if="${#lists.isEmpty(produtos) and not #strings.isEmpty(pesquisa)}">
+                        <strong>Erro!</strong> não foi possivel pesquisar.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <!-- Mensagem de erro -->
+                    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <span th:text="${error}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <form th:action="@{/produtos}" method="get">
+                        <div class="input-group mb-3">
+                            <select class="form-select" id="franquiaPKey" name="franquiaPKey" aria-label="Example select with button addon">
+                                <option disabled selected>Escolha Franquia para Pesquisar...</option>
+                                <option th:each="franquiaPL : ${franquiaPList}" th:value="${franquiaPL}" th:text="${franquiaPL}"></option>
+                            </select>
+                            <button class="btn btn-outline-secondary" type="submit" id="button1">Pesquisar</button>
+                        </div>
+                    </form>
+
+                    <form th:action="@{/produtos}" method="get">
+                        <div class="input-group mb-3">
+                            <input id="nomePKey" name="nomePKey" type="text" class="form-control" placeholder="Pesquisar por Nome" aria-label="Pesquisar por Nome" aria-describedby="button-addon1">
+                            <button class="btn btn-outline-secondary" type="submit" id="button-addon1">Pesquisar</button>
+                        </div>
+
+                    </form>
+
+                    <form th:action="@{/produtos}" method="get">
+                        <div class="input-group mb-3">
+                            <select class="form-select" id="idiomaPKey" name="idiomaPKey" aria-label="Example select with button addon">
+                                <option disabled selected>Escolha o Idioma para Pesquisar...</option>
+                                <option th:each="idiomaPL : ${idiomaPList}" th:value="${idiomaPL}" th:text="${idiomaPL}"></option>
+                            </select>
+                            <button class="btn btn-outline-secondary" type="submit" id="button2">Pesquisar</button>
+                        </div>
+                    </form>
+
+                    <form th:action="@{/produtos}" method="get">
+                        <div class="input-group mb-3">
+                            <select class="form-select" id="tipoPKey" name="tipoPKey" aria-label="Example select with button addon">
+                                <option disabled selected>Pesquisar por Tipo de Produto...</option>
+                                <option value="Deck" >Deck </option>
+                                <option value="Booster" >Booster </option>
+                                <option value="Caixa de Booster" >Caixa de Booster </option>
+                                <option value="Deck Box" >Deck Box </option>
+                                <option value="Playmat" >Playmat</option>
+                                <option value="Shield/Sleeve" >Shield/Sleeve</option>
+                                <option value="Outros" >Outros</option>
+                            </select>
+                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Pesquisar</button>
+                        </div>
+                    </form>
+
+                    <form th:action="@{/produtos}" method="get">
+                        <div class="input-group mb-3">
+                            <input id="fornecedorPKey" name="fornecedorPKey" type="text" class="form-control" placeholder="Pesquisar por Fornecedor" aria-label="Pesquisar por Fornecedor" aria-describedby="button-addon4">
+                            <button class="btn btn-outline-secondary" type="submit" id="button-addon4">Pesquisar</button>
+                        </div>
+                    </form>
+
+                    <form th:action="@{/produtos}" method="get">
+                        <div class="input-group mb-3">
+                            <select class="form-select" id="sortie" name="sortie" aria-label="Example select with button addon">
+                                <option disabled selected>Escolha como orderar a lista...</option>
+                                <option value="pasc" >Por Preço crescente </option>
+                                <option value="pdesc" >Por Preço descrescente </option>
+                                <option value="qasc" >Por Quantidade crescente </option>
+                                <option value="qdesc" >Por Quantidade descrescente </option>
+                            </select>
+                            <button class="btn btn-outline-secondary" type="submit" id="button3">Ordernar</button>
+                        </div>
+                    </form>
+
+                    <!-- Tabela -->
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Franquia</th>
+                                <th>Nome</th>
+                                <th>Idioma</th>
+                                <th>Tipo</th>
+                                <th>Preço</th>
+                                <th>Quantidade</th>
+                                <th>Fornecedor</th>
+                                <th class="text-center">Ações</th>
+                            </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                            <tr th:each="p : ${produtos}">
+                                <td th:text="${p.franquiaP}"></td>
+                                <td th:text="${p.nomeP}"></td>
+                                <td th:text="${p.idiomaP}"></td>
+                                <td th:text="${p.tipoP}"></td>
+                                <td th:text="${#numbers.formatDecimal(p.precoP, 1, 'POINT', 2, 'COMMA')}"></td>
+                                <td class="text-center" th:text="${p.quantidadeP}"></td>
+                                <td th:text="${p.fornecedorP}"></td>
+                                <td class="text-center">
+                                    <a th:href="@{/produtos/editar/{idP}(idP=${p.idP})}"
+                                       class="btn btn-sm btn-primary me-1">
+                                        Editar
+                                    </a>
+                                    <!-- Botão que abre o modal -->
+                                    <button type="button" class="btn btn-sm btn-danger"
+                                            data-bs-toggle="modal"
+                                            th:data-bs-target="|#confirmarExclusao-${p.idP}|">
+                                        Excluir
+                                    </button>
+
+                                    <!-- Modal de Confirmação -->
+                                    <div class="modal fade" th:id="|confirmarExclusao-${p.idP}|" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Excluir Cliente</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                                </div>
+
+                                                <div class="modal-body text-start">
+                                                    Tem certeza de que deseja excluir o Produto
+                                                    <strong th:text="${p.nomeP}"></strong>?
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+
+                                                    <!-- Formulário de exclusão dentro do modal -->
+                                                    <form th:action="@{/produtos/{idP}(idP=${p.idP})}" method="post" class="d-inline">
+                                                        <input type="hidden" name="_method" value="delete"/>
+                                                        <button type="submit" class="btn btn-danger">Excluir</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

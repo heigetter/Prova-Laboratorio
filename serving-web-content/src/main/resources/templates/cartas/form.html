@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Cartas - Formulário</title></head>
+<body>
+<h1 th:text="${cartas.id} != null ? 'Editar Cliente' : 'Novo Cliente'"></h1>
+
+<!-- Formulário Novo Cliente -->
+<form th:if="${cartas.id} == null"
+      th:action="@{/cartas}" method="post" th:object="${cartas}">
+    <label for="franquia">Franquia:</label>
+    <select th:field="*{franquia}" id="franquia" type="text">
+        <option th:value="Yu-Gi-Oh" th:text="Yu-Gi-Oh!">Yu-Gi-Oh!</option>
+        <option th:value="Pokémon" th:text="Pokémon">Pokémon</option>
+        <option th:value="Magic" th:text="Magic: The Gathering">Magic: The Gathering</option>
+        <option th:value="Digimon" th:text="Digimon">Digimon</option>
+        <option th:value="Outro" th:text="Outro">Outro</option>
+    </select><br>
+
+    <label for="nome">Nome:</label>
+    <input th:field="*{nome}" id="nome" type="text" required><br>
+
+    <label for="idioma">Idioma:</label>
+    <select th:field="*{idioma}" id="idioma" type="text">
+        <option th:value="PT" th:text="Português">Português</option>
+        <option th:value="EN" th:text="Inglês">Inglês</option>
+        <option th:value="DE" th:text="Alemão">Alemão</option>
+        <option th:value="IT" th:text="Italiano">Italiano</option>
+        <option th:value="SP" th:text="Espanhol">Espanhol</option>
+        <option th:value="FR" th:text="Francês">Francês</option>
+    </select><br>
+
+    <label for="edicao">Edição:</label>
+    <input th:field="*{edicao}" id="edicao" type="text" required><br>
+
+    <label for="numeroC">Número da Carta:</label>
+    <input th:field="*{numeroC}" id="numeroC" type="text" required><br>
+
+    <label for="preco">Preço:</label>
+    <input th:field="*{preco}" id="preco" type="number" step="0.01"><br>
+
+    <label for="quantidade">Quantidade:</label>
+    <input th:field="*{quantidade}" id="quantidade" type="number"><br>
+
+    <label for="fornecedor">Fornecedor:</label>
+    <input th:field="*{fornecedor}" id="fornecedor" type="text" required><br>
+
+    <!-- Erros por campo (mensagens do Bean Validation) -->
+    <div th:if="${#fields.hasErrors('franquia')}" th:errors="*{franquia}"></div>
+    <div th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+    <div th:if="${#fields.hasErrors('idioma')}" th:errors="*{idioma}"></div>
+    <div th:if="${#fields.hasErrors('edicao')}" th:errors="*{edicao}"></div>
+    <div th:if="${#fields.hasErrors('numeroC')}" th:errors="*{numeroC}"></div>
+    <div th:if="${#fields.hasErrors('preco')}" th:errors="*{preco}"></div>
+    <div th:if="${#fields.hasErrors('quantidade')}" th:errors="*{quantidade}"></div>
+    <div th:if="${#fields.hasErrors('fornecedor')}" th:errors="*{fornecedor}"></div>
+
+    <button type="submit">Cadastrar</button>
+    <a th:href="@{/cartas}">Cancelar</a>
+</form>
+<br>
+<!-- Formulário Editar Cliente -->
+<form th:if="${cartas.id} != null"
+      th:action="@{/cartas/{id}(id=${cartas.id})}" method="post" th:object="${cartas}">
+    <input type="hidden" name="_method" value="put"/>
+
+    <label for="franquia">Franquia:</label>
+    <select th:field="*{franquia}" id="franquia" type="text">
+        <option th:value="Yu-Gi-Oh" th:text="Yu-Gi-Oh!">Yu-Gi-Oh!</option>
+        <option th:value="Pokémon" th:text="Pokémon">Pokémon</option>
+        <option th:value="Magic" th:text="Magic: The Gathering">Magic: The Gathering</option>
+        <option th:value="Digimon" th:text="Digimon">Digimon</option>
+        <option th:value="Outro" th:text="Outro">Outro</option>
+    </select><br>
+
+    <label for="nome">Nome:</label>
+    <input th:field="*{nome}" id="nome" type="text" required><br>
+
+    <label for="idioma">Idioma:</label>
+    <select th:field="*{idioma}" id="idioma" type="text">
+        <option th:value="PT" th:text="Português">Português</option>
+        <option th:value="EN" th:text="Inglês">Inglês</option>
+        <option th:value="DE" th:text="Alemão">Alemão</option>
+        <option th:value="IT" th:text="Italiano">Italiano</option>
+        <option th:value="SP" th:text="Espanhol">Espanhol</option>
+        <option th:value="FR" th:text="Francês">Francês</option>
+    </select><br>
+
+    <label for="edicao">Edição:</label>
+    <input th:field="*{edicao}" id="edicao" type="text" required><br>
+
+    <label for="numeroC">Número da Carta:</label>
+    <input th:field="*{numeroC}" id="numeroC" type="text" required><br>
+
+    <label for="preco">Preço:</label>
+    <input th:field="*{preco}" id="preco" type="number" step="0.01"><br>
+
+    <label for="quantidade">Quantidade:</label>
+    <input th:field="*{quantidade}" id="quantidade" type="number"><br>
+
+    <label for="fornecedor">Fornecedor:</label>
+    <input th:field="*{fornecedor}" id="fornecedor" type="text" required><br>
+
+    <!-- Erros por campo (mensagens do Bean Validation) -->
+    <div th:if="${#fields.hasErrors('franquia')}" th:errors="*{franquia}"></div>
+    <div th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+    <div th:if="${#fields.hasErrors('idioma')}" th:errors="*{idioma}"></div>
+    <div th:if="${#fields.hasErrors('edicao')}" th:errors="*{edicao}"></div>
+    <div th:if="${#fields.hasErrors('numeroC')}" th:errors="*{numeroC}"></div>
+    <div th:if="${#fields.hasErrors('preco')}" th:errors="*{preco}"></div>
+    <div th:if="${#fields.hasErrors('quantidade')}" th:errors="*{quantidade}"></div>
+    <div th:if="${#fields.hasErrors('fornecedor')}" th:errors="*{fornecedor}"></div>
+
+    <button type="submit">Atualizar</button>
+    <a th:href="@{/cartas}">Cancelar</a>
+</form>
+</body>
+</html>
